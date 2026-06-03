@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+!.env.production.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+data/
+logs/
+*.log
+.pytest_cache/
+.ruff_cache/
