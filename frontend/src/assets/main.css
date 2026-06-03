@@ -634,10 +634,16 @@ p {
 }
 
 .map-stack {
+  position: relative;
+  z-index: 1;
   display: grid;
   height: 100%;
   grid-template-rows: auto minmax(250px, 1fr);
   gap: 14px;
+}
+
+.map-stack:hover {
+  z-index: 40;
 }
 
 .map-stack .panel {
@@ -645,7 +651,14 @@ p {
 }
 
 .map-stack .map-panel {
+  position: relative;
+  z-index: 1;
   align-self: start;
+  overflow: visible;
+}
+
+.map-stack .map-panel:hover {
+  z-index: 50;
 }
 
 .map-stack .reference-stack-panel {
@@ -750,7 +763,7 @@ p {
 .map-layout {
   position: relative;
   min-height: 330px;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 8px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0) 78%, #b7e0ff 78%),
@@ -853,7 +866,7 @@ p {
 
 .map-hover-tooltip {
   position: absolute;
-  z-index: 8;
+  z-index: 90;
   width: min(208px, calc(100% - 22px));
   overflow: hidden;
   padding: 8px 9px;
