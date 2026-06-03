@@ -3033,7 +3033,182 @@ td {
   font-weight: 900;
 }
 
-@media (max-width: 1280px) {
+@media (min-width: 861px) and (max-width: 1380px) {
+  .sidebar {
+    width: 232px;
+    flex-basis: 232px;
+  }
+
+  .sidebar-head {
+    min-height: 136px;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 10px;
+    padding: 18px 14px;
+  }
+
+  .brand-logo {
+    min-height: 58px;
+    padding: 7px 9px;
+    border-radius: 14px;
+  }
+
+  .brand-logo img {
+    width: min(142px, 100%);
+  }
+
+  .sidebar-toggle {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+
+  .toggle-lines {
+    width: 21px;
+  }
+
+  .side-nav {
+    gap: 8px;
+    padding: 16px 0;
+  }
+
+  .side-nav a {
+    min-height: 52px;
+    gap: 12px;
+    padding: 0 14px;
+    border-radius: 12px;
+  }
+
+  .nav-label {
+    font-size: 0.94rem;
+  }
+
+  .dashboard-shell {
+    padding: 18px 18px 24px;
+  }
+
+  .topbar {
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .topbar h1 {
+    font-size: clamp(1.95rem, 2.45vw, 2.55rem);
+  }
+
+  .update-chip {
+    min-height: 44px;
+    padding: 7px 12px;
+  }
+
+  .metrics-grid {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .metric-card {
+    min-height: 134px;
+    grid-template-columns: 48px 1fr;
+    column-gap: 10px;
+    row-gap: 8px;
+    padding: 14px 16px 15px;
+    border-radius: 14px;
+  }
+
+  .metric-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .metric-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .metric-card span {
+    font-size: 0.78rem;
+  }
+
+  .metric-card strong {
+    font-size: clamp(1.65rem, 2.7vw, 2.15rem);
+  }
+
+  .metric-card small {
+    font-size: 0.84rem;
+  }
+
+  .metric-card footer {
+    gap: 6px;
+    font-size: 0.76rem;
+  }
+
+  .metric-progress {
+    height: 7px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: minmax(315px, 0.58fr) minmax(555px, 1.42fr);
+    gap: 12px;
+  }
+
+  .secondary-grid {
+    --secondary-card-height: 285px;
+    grid-template-columns: minmax(280px, 0.78fr) minmax(300px, 0.82fr) minmax(230px, 0.58fr);
+    gap: 12px;
+  }
+
+  .panel {
+    padding: 14px;
+  }
+
+  .map-stack {
+    grid-template-rows: auto minmax(230px, 1fr);
+    gap: 12px;
+  }
+
+  .map-panel-header {
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .map-fullscreen-button {
+    min-height: 34px;
+    padding: 0 14px;
+    font-size: 0.72rem;
+  }
+
+  .map-layout {
+    min-height: 305px;
+  }
+
+  .region-map {
+    max-height: 360px;
+  }
+
+  .performance-table {
+    min-width: 560px;
+    font-size: 0.66rem;
+  }
+
+  .performance-table th {
+    padding: 8px 5px;
+    font-size: 0.56rem;
+  }
+
+  .performance-table td {
+    padding: 6px 5px;
+  }
+
+  .progress-cell {
+    min-width: 92px;
+    font-size: 0.62rem;
+  }
+
+  .progress-track {
+    width: 66px;
+  }
+}
+
+@media (max-width: 1140px) {
   .metrics-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
