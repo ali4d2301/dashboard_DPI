@@ -189,10 +189,10 @@ function countWithRate(count, rate) {
               <button
                 type="button"
                 :class="['district-sort-button', { active: sortKey === 'functional' }]"
-                :aria-label="sortButtonLabel('Fonctionnels', 'functional')"
+                :aria-label="sortButtonLabel('Utilisés', 'functional')"
                 @click="sortBy('functional')"
               >
-                <span>Fonctionnels</span>
+                <span>Utilisés</span>
                 <b aria-hidden="true">{{ sortIcon("functional") }}</b>
               </button>
             </th>
@@ -200,10 +200,10 @@ function countWithRate(count, rate) {
               <button
                 type="button"
                 :class="['district-sort-button', { active: sortKey === 'partial' }]"
-                :aria-label="sortButtonLabel('Partiellement fonctionnels', 'partial')"
+                :aria-label="sortButtonLabel('Partiellement utilisés', 'partial')"
                 @click="sortBy('partial')"
               >
-                <span>Partiellement fonctionnels</span>
+                <span>Partiellement utilisés</span>
                 <b aria-hidden="true">{{ sortIcon("partial") }}</b>
               </button>
             </th>
@@ -211,10 +211,10 @@ function countWithRate(count, rate) {
               <button
                 type="button"
                 :class="['district-sort-button', { active: sortKey === 'nonFunctional' }]"
-                :aria-label="sortButtonLabel('Non fonctionnels', 'nonFunctional')"
+                :aria-label="sortButtonLabel('Non utilisés', 'nonFunctional')"
                 @click="sortBy('nonFunctional')"
               >
-                <span>Non fonctionnels</span>
+                <span>Non utilisés</span>
                 <b aria-hidden="true">{{ sortIcon("nonFunctional") }}</b>
               </button>
             </th>

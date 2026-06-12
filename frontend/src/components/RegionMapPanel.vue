@@ -589,7 +589,7 @@ function endPan(event) {
             <b>{{ formatRate(tooltipSummary.deploymentRate) }}%</b>
           </div>
           <div class="tooltip-metric">
-            <span>Taux de fonctionnalité</span>
+            <span>Taux d'utilisation</span>
             <b>{{ formatRate(tooltipSummary.functionalityRate) }}%</b>
           </div>
         </div>

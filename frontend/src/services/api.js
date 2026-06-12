@@ -1,20 +1,43 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const DEFAULT_API_BASE_URL = "http://127.0.0.1:8000";
+const CONFIGURED_API_BASE_URL = import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL;
+const API_BASE_URLS = import.meta.env.DEV
+  ? Array.from(new Set([CONFIGURED_API_BASE_URL, DEFAULT_API_BASE_URL, "http://localhost:8000"]))
+  : [CONFIGURED_API_BASE_URL];
 const REQUEST_TIMEOUT_MS = 15000;
 
-async function request(path) {
+async function requestFromBase(baseUrl, path) {
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`${baseUrl}${path}`, {
     signal: controller.signal,
   }).finally(() => window.clearTimeout(timeoutId));
 
   if (!response.ok) {
     const payload = await response.json().catch(() => ({}));
-    throw new Error(payload.detail || `Erreur API ${response.status}`);
+    const error = new Error(payload.detail || `Erreur API ${response.status}`);
+    error.isApiHttpError = true;
+    throw error;
   }
 
   return response.json();
+}
+
+async function request(path) {
+  let lastError = null;
+
+  for (const baseUrl of API_BASE_URLS) {
+    try {
+      return await requestFromBase(baseUrl, path);
+    } catch (error) {
+      if (error.isApiHttpError || !import.meta.env.DEV) {
+        throw error;
+      }
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("Impossible de joindre l'API locale.");
 }
 
 function queryString(params = {}) {

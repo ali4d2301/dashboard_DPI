@@ -26,7 +26,7 @@ const totals = computed(() =>
 );
 
 const totalDeploymentRate = computed(() => percent(totals.value.deployed, totals.value.supported));
-const totalFunctionalityRate = computed(() => percent(totals.value.functional, totals.value.deployed));
+const totalUtilizationRate = computed(() => percent(totals.value.functional, totals.value.deployed));
 
 function formatNumber(value) {
   return Number(value || 0).toLocaleString("fr-FR");
@@ -52,8 +52,8 @@ function percent(value, total) {
             <th>Type d'établissement</th>
             <th>Nombre</th>
             <th>Taux de déploiement</th>
-            <th>Taux de fonctionnalité</th>
-            <th>Sites non fonctionnels</th>
+            <th>Taux d'utilisation</th>
+            <th>Sites non utilisés</th>
           </tr>
         </thead>
         <tbody>
@@ -97,7 +97,7 @@ function percent(value, total) {
               <span class="rate-count">({{ formatNumber(totals.deployed) }})</span>
             </td>
             <td class="total-rate">
-              <span class="rate-percent">{{ formatRate(totalFunctionalityRate) }}%</span>
+              <span class="rate-percent">{{ formatRate(totalUtilizationRate) }}%</span>
               <span class="rate-count">({{ formatNumber(totals.functional) }})</span>
             </td>
             <td class="non-functional">{{ formatNumber(totals.nonFunctional) }}</td>

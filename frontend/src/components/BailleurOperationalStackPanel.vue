@@ -9,9 +9,9 @@ const props = defineProps({
 });
 
 const statusColors = {
-  Fonctionnels: "#39b960",
-  "Partiellement fonctionnels": "#ffc72c",
-  "Non fonctionnels": "#ee3737",
+  Utilisés: "#39b960",
+  "Partiellement utilisés": "#ffc72c",
+  "Non utilisés": "#ee3737",
   "Non déployé": "#9aa6b5",
 };
 
@@ -32,7 +32,7 @@ function formatRate(value) {
 }
 
 function legendLabelParts(status) {
-  return status === "Fonctionnels" ? [status] : status.split(" ");
+  return status === "Utilisés" ? [status] : status.split(" ");
 }
 
 function updateTooltipPosition(event, item, status) {
@@ -92,7 +92,7 @@ function hideTooltip() {
       <div class="operational-legend">
         <span v-for="status in statuses" :key="status">
           <i :style="{ background: colorFor(status) }"></i>
-          <b :class="{ 'legend-label--stacked': status !== 'Fonctionnels' }">
+          <b :class="{ 'legend-label--stacked': status !== 'Utilisés' }">
             <span v-for="part in legendLabelParts(status)" :key="part">{{ part }}</span>
           </b>
         </span>

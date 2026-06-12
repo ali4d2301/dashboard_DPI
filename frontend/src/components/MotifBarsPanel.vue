@@ -60,7 +60,7 @@ function formatRate(value) {
 
 <template>
   <article class="panel motif-panel">
-    <h2>Principaux motifs de non fonctionnalité</h2>
+    <h2>Principaux motifs de non-utilisation</h2>
     <div class="horizontal-bars">
       <div
         v-for="item in items"

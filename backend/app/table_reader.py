@@ -149,6 +149,7 @@ def _performance_items_from_rows(
                 "supported": 0,
                 "deployed": 0,
                 "functional": 0,
+                "partial": 0,
                 "nonFunctional": 0,
             },
         )
@@ -157,6 +158,8 @@ def _performance_items_from_rows(
             current["deployed"] = int(current["deployed"]) + 1
         if _is_functional(row.get("statut_operationnel")):
             current["functional"] = int(current["functional"]) + 1
+        if _is_partial(row.get("statut_operationnel")):
+            current["partial"] = int(current["partial"]) + 1
         if _is_non_functional(row.get("statut_operationnel")):
             current["nonFunctional"] = int(current["nonFunctional"]) + 1
 
@@ -165,6 +168,7 @@ def _performance_items_from_rows(
         supported = int(item["supported"])
         deployed = int(item["deployed"])
         functional = int(item["functional"])
+        unavailable = int(item["partial"]) + int(item["nonFunctional"])
         items.append(
             {
                 "label": item["label"],
@@ -173,7 +177,7 @@ def _performance_items_from_rows(
                 "deploymentRate": (deployed / supported * 100) if supported else 0,
                 "functional": functional,
                 "functionalityRate": (functional / deployed * 100) if deployed else 0,
-                "nonFunctional": int(item["nonFunctional"]),
+                "nonFunctional": unavailable,
             }
         )
 
@@ -309,9 +313,9 @@ def _operational_bailleur_from_rows(
     limit: int,
 ) -> dict[str, Any]:
     status_order = [
-        ("Fonctionnels", "functional"),
-        ("Partiellement fonctionnels", "partial"),
-        ("Non fonctionnels", "non_functional"),
+        ("Utilisés", "functional"),
+        ("Partiellement utilisés", "partial"),
+        ("Non utilisés", "non_functional"),
         ("Non d\u00e9ploy\u00e9", "not_deployed"),
     ]
     groups: dict[str, dict[str, Any]] = {}
@@ -607,6 +611,9 @@ def performance_by_column(column_name: str, limit: int = 12, region: str | None 
     functional_count = func.sum(
         case((operational_column == "Fonctionnel", 1), else_=0)
     ).label("functional")
+    partial_count = func.sum(
+        case((operational_column == "Partiellement fonctionnel", 1), else_=0)
+    ).label("partial")
     non_functional_count = func.sum(
         case((operational_column == "Non fonctionnel", 1), else_=0)
     ).label("non_functional")
@@ -617,6 +624,7 @@ def performance_by_column(column_name: str, limit: int = 12, region: str | None 
             supported_count,
             deployed_count,
             functional_count,
+            partial_count,
             non_functional_count,
         )
         .group_by(group_column)
@@ -634,7 +642,7 @@ def performance_by_column(column_name: str, limit: int = 12, region: str | None 
         supported = int(row.supported or 0)
         deployed = int(row.deployed or 0)
         functional = int(row.functional or 0)
-        non_functional = int(row.non_functional or 0)
+        unavailable = int(row.partial or 0) + int(row.non_functional or 0)
         items.append(
             {
                 "label": str(_json_value(row.label) or "Non renseigne"),
@@ -643,7 +651,7 @@ def performance_by_column(column_name: str, limit: int = 12, region: str | None 
                 "deploymentRate": (deployed / supported * 100) if supported else 0,
                 "functional": functional,
                 "functionalityRate": (functional / deployed * 100) if deployed else 0,
-                "nonFunctional": non_functional,
+                "nonFunctional": unavailable,
             }
         )
 
@@ -862,9 +870,9 @@ def operational_status_by_bailleur(limit: int = 6, region: str | None = None) ->
         rows = connection.execute(statement).all()
 
     status_order = [
-        ("Fonctionnels", "functional"),
-        ("Partiellement fonctionnels", "partial"),
-        ("Non fonctionnels", "non_functional"),
+        ("Utilisés", "functional"),
+        ("Partiellement utilisés", "partial"),
+        ("Non utilisés", "non_functional"),
         ("Non déployé", "not_deployed"),
     ]
 

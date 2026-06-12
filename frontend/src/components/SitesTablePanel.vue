@@ -119,7 +119,7 @@ const filterOptions = computed(() => {
 
       const value = row[key];
       if (value === null || value === undefined || value === "") return;
-      values.set(String(value), key === "region_sanitaire" ? formatRegionLabel(value) : displayText(value));
+      values.set(String(value), displayFilterValue(key, value));
     });
 
     acc[key] = Array.from(values, ([value, label]) => ({ value, label })).sort((a, b) =>
@@ -405,7 +405,7 @@ function filterOptionList(key) {
 
 function selectedFilterLabel(key) {
   if (filters.value[key] === "all") return "Tous";
-  return filterOptions.value[key]?.find((option) => option.value === filters.value[key])?.label || displayText(filters.value[key]);
+  return filterOptions.value[key]?.find((option) => option.value === filters.value[key])?.label || displayFilterValue(key, filters.value[key]);
 }
 
 function toggleFilterDropdown(key) {
@@ -526,6 +526,22 @@ function normalizeKey(value = "") {
 
 function formatRegionLabel(value) {
   return REGION_DISPLAY_NAMES[normalizeKey(value)] || displayText(value);
+}
+
+function displayFilterValue(key, value) {
+  if (key === "region_sanitaire") return formatRegionLabel(value);
+  if (key === "statut_operationnel") return operationalStatusLabel(value);
+  return displayText(value);
+}
+
+function operationalStatusLabel(value) {
+  const label = displayText(value);
+  const normalized = normalize(label);
+
+  if (normalized === "fonctionnel") return "Utilisé";
+  if (normalized.includes("partiellement fonctionnel")) return "Partiellement utilisé";
+  if (normalized.includes("non fonctionnel")) return "Non utilisé";
+  return label;
 }
 
 function displayText(value, fallback = "-") {
@@ -726,7 +742,7 @@ function formatNumber(value) {
             <td>{{ formatDate(row.date_deploiement) }}</td>
             <td>
               <span :class="['site-status-badge', statusClass(row.statut_operationnel, 'operational')]">
-                {{ displayText(row.statut_operationnel) }}
+                {{ operationalStatusLabel(row.statut_operationnel) }}
               </span>
             </td>
             <td class="site-reason">{{ displayText(row.motif_principal) }}</td>

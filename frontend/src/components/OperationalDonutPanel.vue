@@ -31,9 +31,9 @@ function formatRate(value) {
         <strong>{{ formatRate(functionalRate) }}%</strong>
       </div>
       <div class="status-list">
-        <span><i class="green"></i>Fonctionnels <strong>{{ formatNumber(functionalCount) }}</strong></span>
-        <span><i class="yellow"></i>Partiellement fonctionnels <strong>{{ formatNumber(partialCount) }}</strong></span>
-        <span><i class="red"></i>Non fonctionnels <strong>{{ formatNumber(nonFunctionalCount) }}</strong></span>
+        <span><i class="green"></i>Utilisés <strong>{{ formatNumber(functionalCount) }}</strong></span>
+        <span><i class="yellow"></i>Partiellement utilisés <strong>{{ formatNumber(partialCount) }}</strong></span>
+        <span><i class="red"></i>Non utilisés <strong>{{ formatNumber(nonFunctionalCount) }}</strong></span>
         <b>Total : {{ formatNumber(deployedCount) }}</b>
       </div>
     </div>

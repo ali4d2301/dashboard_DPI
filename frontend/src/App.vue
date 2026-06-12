@@ -136,12 +136,14 @@ const establishmentTypeRows = computed(() => {
       supported: 0,
       deployed: 0,
       functional: 0,
+      partial: 0,
       nonFunctional: 0,
     };
 
     current.supported += 1;
     if (isDeployed(row.statut_deploiement)) current.deployed += 1;
     if (isFunctional(row.statut_operationnel)) current.functional += 1;
+    if (normalizeStatus(row.statut_operationnel).includes("partiellement")) current.partial += 1;
     if (isNonFunctional(row.statut_operationnel)) current.nonFunctional += 1;
     groups.set(type, current);
   });
@@ -149,6 +151,7 @@ const establishmentTypeRows = computed(() => {
   const rowsFromLoadedSites = Array.from(groups.values())
     .map((item) => ({
       ...item,
+      nonFunctional: item.partial + item.nonFunctional,
       deploymentRate: percent(item.deployed, item.supported),
       functionalityRate: percent(item.functional, Math.max(item.deployed, 1)),
     }))
@@ -183,7 +186,7 @@ const operationalBailleurChartPayload = computed(() => {
     return operationalBailleurPayload.value;
   }
 
-  const statuses = ["Fonctionnels", "Partiellement fonctionnels", "Non fonctionnels", "Non déployé"];
+  const statuses = ["Utilisés", "Partiellement utilisés", "Non utilisés", "Non déployé"];
   const groups = new Map();
 
   rows.value.forEach((row) => {
@@ -194,9 +197,9 @@ const operationalBailleurChartPayload = computed(() => {
         label,
         total: 0,
         counts: {
-          Fonctionnels: 0,
-          "Partiellement fonctionnels": 0,
-          "Non fonctionnels": 0,
+          Utilisés: 0,
+          "Partiellement utilisés": 0,
+          "Non utilisés": 0,
           "Non déployé": 0,
         },
       };
@@ -206,11 +209,11 @@ const operationalBailleurChartPayload = computed(() => {
     if (isNotDeployed(row.statut_deploiement)) {
       current.counts["Non déployé"] += 1;
     } else if (isFunctional(row.statut_operationnel)) {
-      current.counts.Fonctionnels += 1;
+      current.counts.Utilisés += 1;
     } else if (normalizeStatus(row.statut_operationnel).includes("partiellement")) {
-      current.counts["Partiellement fonctionnels"] += 1;
+      current.counts["Partiellement utilisés"] += 1;
     } else {
-      current.counts["Non fonctionnels"] += 1;
+      current.counts["Non utilisés"] += 1;
     }
 
     groups.set(label, current);
@@ -267,7 +270,7 @@ const kpis = computed(() => [
     footer: "Taux de déploiement",
   },
   {
-    label: "Sites fonctionnels",
+    label: "Sites utilisés",
     value: functionalCount.value,
     rate: functionalRate.value,
     hint: `${formatRate(functionalRate.value)}%`,
@@ -535,10 +538,10 @@ onMounted(() => {
               <h3>Le tableau de bord permet notamment de :</h3>
               <ul>
                 <li><span>01</span><p>Suivre le nombre de sites ciblés, déployés et opérationnels.</p></li>
-                <li><span>02</span><p>Mesurer les taux de déploiement et de fonctionnalité du DPI.</p></li>
+                <li><span>02</span><p>Mesurer les taux de déploiement et d'utilisation du DPI.</p></li>
                 <li><span>03</span><p>Visualiser la répartition géographique des sites par région et district sanitaire.</p></li>
                 <li><span>04</span><p>Analyser les performances des différents bailleurs et partenaires impliqués.</p></li>
-                <li><span>05</span><p>Identifier les principaux motifs de non-fonctionnalité ou de fonctionnement partiel.</p></li>
+                <li><span>05</span><p>Identifier les principaux motifs de non-utilisation ou d'utilisation partielle.</p></li>
                 <li><span>06</span><p>Consulter les informations détaillées relatives à chaque établissement sanitaire concerné.</p></li>
               </ul>
             </div>
